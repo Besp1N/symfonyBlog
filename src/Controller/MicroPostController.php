@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroPost;
+use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,13 +34,7 @@ class MicroPostController extends AbstractController
     #[Route("/micro-post/add", name: "micro_post_add", priority: 2)]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $microPost = new MicroPost();
-        $form = $this->createFormBuilder($microPost)
-            ->add("title")
-            ->add("text")
-            ->add("submit", SubmitType::class, ["label" => "Save"])
-            ->getForm();
-
+        $form = $this->createForm(MicroPostType::class, new MicroPost());
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -47,15 +42,31 @@ class MicroPostController extends AbstractController
             $post->setCreated(new DateTime());
             $entityManager->persist($post);
             $entityManager->flush();
-
             $this->addFlash("success", "Your micro post has been added");
             return $this->redirectToRoute("app_micro_post");
 
         }
-
         return $this->render("micro_post/add.html.twig", [
             "form" => $form
         ]);
+    }
 
+    #[Route("/micro-post/{post}/edit", name: "micro_post_edit")]
+    public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(MicroPostType::class, $post);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+            $entityManager->persist($post);
+            $entityManager->flush();
+            $this->addFlash("success", "Your micro post has been updated");
+            return $this->redirectToRoute("app_micro_post");
+
+        }
+        return $this->render("micro_post/add.html.twig", [
+            "form" => $form
+        ]);
     }
 }
