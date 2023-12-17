@@ -31,7 +31,7 @@ class MicroPostController extends AbstractController
         ]);
     }
 
-    #[Route("/micro-post/add", name: "micro_post_add", priority: 2)]
+    #[Route("/micro-post/add", name: "app_micro_post_add", priority: 2)]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MicroPostType::class, new MicroPost());
@@ -50,7 +50,7 @@ class MicroPostController extends AbstractController
         ]);
     }
 
-    #[Route("/micro-post/{post}/edit", name: "micro_post_edit")]
+    #[Route("/micro-post/{post}/edit", name: "app_micro_post_edit")]
     public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MicroPostType::class, $post);
@@ -64,7 +64,7 @@ class MicroPostController extends AbstractController
             return $this->redirectToRoute("app_micro_post");
 
         }
-        return $this->render("micro_post/add.html.twig", [
+        return $this->render("micro_post/edit.html.twig", [
             "form" => $form
         ]);
     }
