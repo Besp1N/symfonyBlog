@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
+use App\Entity\MicroPost;
 use App\Entity\User;
 use App\Entity\UserProfile;
+use App\Repository\MicroPostRepository;
 use App\Repository\UserProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,22 +21,25 @@ class HelloController extends AbstractController
         ["message" => "bye", "created" => "2021/01/14"]
     ];
     #[Route('/', name: 'app_index')]
-    public function index(UserProfileRepository $profiles, EntityManagerInterface $entityManager): Response
+    public function index(MicroPostRepository $posts, EntityManagerInterface $entityManager): Response
     {
-//        $user = new User();
-//        $user->setEmail("dupa@wp.pl");
-//        $user->setPassword("123456789");
+//       $post = new MicroPost();
+//       $post->setTitle("hello");
+//       $post->setText("hello");
+//       $post->setCreated(new \DateTime());
 //
-//       $profile = new UserProfile();
-//       $profile->setUser($user);
+//       $comment = new Comment();
+//       $comment->setText("hello");
+//       $post->addComment($comment);
 //
-//       $entityManager->persist($profile);
+//       $entityManager->persist($post);
 //       $entityManager->flush();
+       $post = $posts->find(5);
+       $comment = $post->getComments()[0];
 
-//        $profile = $profiles->find(1);
-//        $entityManager->remove($profile);
-//        $entityManager->flush();
-
+       $post->removeComment($comment);
+       $entityManager->persist($post);
+       $entityManager->flush();
 
        return $this->render(
            "hello/index.html.twig", [
