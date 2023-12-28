@@ -34,12 +34,12 @@ class HelloController extends AbstractController
 //
 //       $entityManager->persist($post);
 //       $entityManager->flush();
-       $post = $posts->find(5);
-       $comment = $post->getComments()[0];
-
-       $post->removeComment($comment);
-       $entityManager->persist($post);
-       $entityManager->flush();
+//       $post = $posts->find(5);
+//       $comment = $post->getComments()[0];
+//
+//       $post->removeComment($comment);
+//       $entityManager->persist($post);
+//       $entityManager->flush();
 
        return $this->render(
            "hello/index.html.twig", [
